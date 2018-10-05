@@ -1,0 +1,16 @@
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\csc.exe
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\System.Collections.Immutable.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\System.Reflection.Metadata.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\vbc.exe
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\VBCSCompiler.exe
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\roslyn\VBCSCompiler.exe.config
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\WebApplication1.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\bin\WebApplication1.pdb
+C:\_PR\_FB\FaceBot\FaceBot.Client\obj\Debug\WebApplication1.dll
+C:\_PR\_FB\FaceBot\FaceBot.Client\obj\Debug\WebApplication1.pdb

@@ -1,0 +1,106 @@
+
+<div class="login-body">
+  <div class="login-panel ui-fluid">
+    <form (ngSubmit)="register()" #regForm="ngForm">
+      <div class="ui-g">
+        <div class="ui-g-12 login-header">
+          <h1>Register</h1>
+        </div>
+        <div class="ui-g-12 ">
+            <span class="md-inputfield">
+                <input type="text"
+                       name="userName"
+                       pInputText
+                       required
+                       [(ngModel)]="model.userName"
+                       autocomplete="username"
+                       #userName="ngModel"
+                       type="email"
+                       email
+                       pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$"
+                       [ngClass]="{'ng-invalid':!allowed || userName.invalid}">
+                <label>Email</label>
+                <div class="ui-message ui-messages-error ui-corner-all "
+                     *ngIf="!allowed && !_restService.isLoading()">This email is taken
+                </div>
+                <div class="ui-message ui-messages-error ui-corner-all "
+                     *ngIf="userName.invalid && !userName.errors.required">This email is not valid
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ">
+            <span class="md-inputfield">
+                <input type="text"
+                       name="firstName"
+                       pInputText
+                       required
+                       [(ngModel)]="model.firstName">
+                <label>First Name</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ">
+            <span class="md-inputfield">
+                <input type="text"
+                       name="lastName"
+                       pInputText
+                       required
+                       [(ngModel)]="model.lastName">
+                <label>Last Name</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ">
+            <span class="md-inputfield">
+                <input type="text"
+                       name="company"
+                       pInputText
+                       [(ngModel)]="model.company"
+                       [ngModelOptions]="{standalone: true}">
+                <label>Company Name (optional)</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ">
+            <span class="md-inputfield">
+                <input type="password"
+                       name="password"
+                       pInputText
+                       required
+                       [(ngModel)]="model.password">
+                <label>Password</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ">
+            <span class="md-inputfield">
+                <input type="password"
+                       name="confirmPassword"
+                       pInputText
+                       required
+                       [(ngModel)]="model.confirmPassword"
+                       [ngClass]="{'ng-invalid':
+                       (model.confirmPassword && model.confirmPassword!==model.password)}">
+                       <label>Confirm Password</label>
+                       <div class="ui-message ui-messages-error ui-corner-all centered"
+                            *ngIf="model.confirmPassword && model.confirmPassword!==model.password">
+                            Passwords must match
+                       </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ">
+          <button type="submit"
+                  label="Register" pButton icon="ui-icon-person"
+                  [disabled]="!regForm.form.valid ||
+                            (model.confirmPassword!=model.password) ||
+                            _restService.isLoading() ||
+                            !allowed ">
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>

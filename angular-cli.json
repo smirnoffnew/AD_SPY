@@ -1,0 +1,76 @@
+{
+  "project": {
+    "version": "1.0.0-beta.21",
+    "name": "FaceBot.Client"
+  },
+
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.json",
+      "prefix": "app",
+      "mobile": false,
+      "styles": [
+        "../node_modules/primeng/resources/primeng.min.css",
+        "../node_modules/slick-carousel/slick/slick.css",
+        "../node_modules/slick-carousel/slick/slick-theme.css",
+        "assets/theme/theme-dark-blue.css",
+        "assets/layout/css/layout-dark-blue.css",
+
+        "styles.scss",
+        "font.css"
+      ],
+      "scripts": [
+        "../node_modules/chart.js/dist/Chart.bundle.js",
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/slick-carousel/slick/slick.js",
+        "assets/layout/js/ripple.js",
+        "../node_modules/signalr/jquery.signalR.js",
+        "hubs.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "debug": "environments/environment.debug.ts",
+        "dev": "environments/environment.dev.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "addons": [
+  ],
+  "packages": [],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
+  }
+}

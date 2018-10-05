@@ -1,0 +1,16 @@
+<div >
+  <div *ngFor='let key of getKeys()' >
+    <table class="normal-color">
+      <tr>
+        <td >
+          {{constructLabel(key,getFilters())}}
+        </td>
+        <td *ngIf="showClose">
+          <i (click)="_adsLibService.removeKey(key)" class="fa ui-icon-clear tag-button"></i>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>
+

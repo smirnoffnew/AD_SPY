@@ -1,0 +1,15 @@
+.ad-outer-box {
+  width: 100%;
+  border: 1px solid #dfe0e4;
+  border-radius: 3px;
+  background: #ffffff;
+  margin: 10px;
+}
+.image-div {
+  height: 350px;
+  background-size: contain;
+  background:url(/assets/images/ad-loading.gif) no-repeat;
+  /*background:url(/assets/images/panel-bg.jpg) no-repeat;*/
+  background-position: center;
+  padding: 10px;
+}

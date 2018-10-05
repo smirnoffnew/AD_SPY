@@ -1,0 +1,164 @@
+$primary-color: #1d2129;
+$primeng-blue: #5180ce;
+$grey-bg: #fafafa;
+
+.full-width {
+  width: 100%;
+}
+
+.centered {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.space-on-top {
+  margin-top: 30px;
+}
+
+.right {
+  text-align: right;
+}
+
+.fb-container-centered {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.fb-container {
+  max-width: 1100px;
+}
+
+div, button, p, td, label, h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300 !important;
+}
+
+.ads-grey-bg {
+  background-color: $grey-bg;
+}
+
+//panel styles are here because primeng screws up them if they are in component CSS file
+
+#panel {
+  .ui-dropdown-trigger * {
+    color: white !important;
+  }
+
+  .ui-dropdown-label {
+    line-height: 27px;
+  }
+
+  input, p, span, div, label, :not(span.ui-radiobutton-icon) {
+    color: white;
+  }
+  .ui-dropdown-item span, #panel .ui-listbox-item span, #panel .ui-autocomplete-list-item span {
+    color: #1d2129 !important;
+  }
+
+}
+
+.normal-color, .normal-color * {
+  color: $primary-color !important;
+}
+
+.ui-radiobutton-label {
+  color: $primary-color !important;
+}
+
+.selected-filter {
+  border-bottom: 2px solid $primeng-blue !important;
+}
+
+.tag-button {
+  margin-top: 5px;
+  cursor: pointer
+}
+
+.tag {
+  display: inline-block;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  padding: 2px 2px;
+  margin: 2px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.default-anchor {
+  color: #337ab7 !important;
+}
+
+.default-anchor:hover {
+  color: #01b2fe !important;
+}
+
+.dotted-underline {
+  border-bottom: 1px dotted #000;
+}
+
+.fb-blue {
+  color: #365899;
+}
+
+.small-text {
+  font-size: 12px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.item {
+  display: flex;
+}
+
+.item img {
+  margin: auto;
+}
+
+/* You can add global styles to this file, and also import other style files */
+.slick-arrow {
+  color: #ccc;
+  border: 1px solid red;
+  background-color: #ccc;
+}
+
+.slick-next {
+  right: 0px
+}
+
+.slick-prev {
+  left: 0px;
+  z-index: 996999;
+}
+
+.slick-container {
+  max-width: 85%;
+  margin: auto;
+}
+
+.login-body {
+  min-height: 654px;
+}
+
+/*modal window styles*/
+.ui-dialog-titlebar.ui-widget-header {
+  background-color: #3e464c !important;
+  color: #d8dadb !important;
+  min-width: 300px;
+}
+p-dialog > .ui-widget-content {
+  border: none !important;
+}
+p-confirmdialog > .ui-widget-content {
+  border: none !important;
+}
+.ui-dialog-content.ui-widget-content > form {
+  padding-bottom: 20px;
+}

@@ -1,0 +1,24 @@
+.custom-title {
+  font-weight: 500 !important;
+  font-size: 22px;
+  color: #706f6f;
+}
+.account-border-element {
+  border-left: solid #d1d1d1 0.5px;
+  border-right: solid #d1d1d1 0.5px;
+  border-bottom: solid #d1d1d1 0.5px;
+}
+.account-card-padding {
+  padding: 25px 45px 25px 45px;
+}
+
+.chevron {
+  font-size: 35px;
+  color: #706f6f;
+  cursor: pointer;
+}
+
+/*todo: a candidate for global style*/
+.chevron:hover {
+  color: #337ab7;
+}

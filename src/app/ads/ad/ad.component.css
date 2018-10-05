@@ -1,0 +1,146 @@
+.video, img {
+  max-width: 100%;
+  width: 100%;
+}
+span img {width: inherit;}
+
+.corner-icon {
+  font-size: 35px;
+}
+
+.ad-outer-box {
+  border: 1px solid #dfe0e4;
+  border-radius: 3px;
+  background: #ffffff;
+  margin: 10px;
+  padding: 10px;
+}
+
+.emoticon {
+  width: 18px;
+  height: 18px;
+  background: url('../../../assets/images/emoticons.png');
+  background-repeat: no-repeat;
+}
+
+.like {
+  background-position: 0px 0px;
+}
+
+.love {
+  background-position: -20px -0.6px;
+}
+
+.haha {
+  background-position: -43px 0px;
+}
+
+.wow {
+  background-position: 0px -28.1px;
+}
+
+.sad {
+  background-position: -20px -27.2px;
+}
+
+.angry {
+  background-position: -43px -27px;
+}
+
+.bottom-table {
+  table-layout: fixed;
+  width: 100%;
+  font-weight: bold;
+}
+
+.bottom-table td {
+
+}
+
+.bottom-table > tbody > tr > td {
+  text-align: center;
+}
+
+.bottom-table > tbody > tr > td:nth-child(n+2) {
+
+  border-left: 1px solid #cdd0d4;
+}
+
+.icon-man {
+  color: #337ab6;
+}
+
+.icon-woman {
+  color: #ff96f4;
+}
+
+
+.logo-icon {
+  width: 30px;
+  height: 30px;
+}
+
+
+.actionLinkLinkTitle {
+  font-size: 18px;
+  font-family: Georgia, serif;
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.actionLinkLinkDescription {
+  font-size: 12px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: #1d2129;
+}
+
+.actionLinkLinkTitleMulti {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  overflow: hidden;
+  color: #000;
+
+}
+
+.actionLinkLinkDescriptionMulti {
+
+  font-size: 12px;
+  color: #1d2129;
+  height: 18px;
+}
+
+
+/*todo: a candidate for global style*/
+.space-on-top {
+  margin-top: 30px;
+}
+
+/*todo: a candidate for global style*/
+.more-space-on-top {
+  margin-top: 50px;
+}
+
+td {
+  padding: 3px;
+}
+
+.table-container {
+  text-align: left;
+  display: inline-block;
+}
+
+.line {
+  display: inline-block;
+}
+
+.emoji-container {
+  margin-top: 5px;
+}
+
+.slider-container {
+    max-width: 650px;
+    margin: auto;
+}

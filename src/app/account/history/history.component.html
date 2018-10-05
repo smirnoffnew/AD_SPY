@@ -1,0 +1,19 @@
+<div class="container well">
+  <div *ngIf="_restService.isLoading()">Loading...</div>
+  <div *ngIf="!_restService.isLoading()">
+    <h1>
+      <a [routerLink]="['/account']" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-o-left"></i> Back</a>
+      Subscription History
+    </h1>
+    <p-dataTable [value]="history" *ngIf="history">
+      <p-column header="Date">
+        <ng-template let-l="rowData" pTemplate="body">
+          {{l.when|date}}
+        </ng-template>
+      </p-column>
+      <p-column field="what" header="What">
+      </p-column>
+
+    </p-dataTable>
+  </div>
+</div>

@@ -1,0 +1,563 @@
+<div fxLayout='column' fxLayoutAlign="center center" class="ads-grey-bg ">
+  <div id="panel" class="panel-container" style="width: 100%">
+    <div class="fb-container-centered centered">
+      <h1 class="search-title">Search for ads</h1>
+
+      <div style="margin: 10px 0;">
+        <p-dropdown [scrollHeight]="250" [options]="dd"
+                    [style]="{'width':'150px', 'color':'white','margin-bottom':'10.5px'}"
+                    [autoWidth]="true"
+                    [(ngModel)]="filters.selectedValue"></p-dropdown>
+            <span *ngFor="let c of searchBoxes">
+        <input style="width: 250px;" pInputText *ngIf="c.type==filters.selectedValue && !c.completer" type="text"
+
+               [(ngModel)]="c.value" [ngModelOptions]="{standalone: true}">
+      </span>
+
+        <p-autoComplete [inputStyle]="{'width': '252px'}"
+                        [(ngModel)]="country" [suggestions]="countryMatches"
+                        *ngIf="filters.selectedValue=='countries'"
+                        (onSelect)="countrySelected()"
+                        (completeMethod)="searchCountry($event)"></p-autoComplete>
+        <button style="margin-left: 5px;" [disabled]="disablePreview()" pButton type="submit" (click)="search()"
+                class="ui-button-info"
+                label="Preview"></button>
+
+        <button [disabled]="disablePreview()" pButton (click)="addCurrentToParams(); country=null;"
+                label="Add to Filters"
+                class="ui-button-primary"></button>
+      </div>
+    </div>
+    <div id="filters" *ngIf='filtersReady'>
+
+
+      <div fxLayout.xs="column" fxLayout="row" fxLayoutAlign="space-around center">
+
+        <div fxFlex="100%" fxLayout="column" fxLayout.lg="row">
+            <div fxFlex="100%" fxFlex.lg="50%" class="centered">
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(siteType,$event);'
+                        [ngClass]="{'selected-filter': filters.siteType!='all'}" label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Site type</td>
+
+                        <td>
+                          <i class="material-icons" *ngIf="!siteType.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="siteType.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #siteType (onBeforeShow)="siteType.isOpen=true" (onBeforeHide)="siteType.isOpen=false">
+
+                  <div class="panel-panel">
+                    <p-radioButton name="groupname3" value="all" [(ngModel)]="filters.siteType"
+                                   label="Facebook or Instagram"
+                                   (ngModelChange)="onSiteTypeChange()"></p-radioButton>
+                    <!--<span class="normal-color"></span>-->
+
+                    <br><br>
+                    <p-radioButton name="groupname3"
+                                   label="Facebook"
+                                   value="facebook" [(ngModel)]="filters.siteType"
+                                   (ngModelChange)="onSiteTypeChange(e)"></p-radioButton>
+
+                    <br><br>
+                    <p-radioButton name="groupname3"
+                                   label="Instagram"
+                                   value="instagram" [(ngModel)]="filters.siteType"
+                                   (ngModelChange)="onSiteTypeChange()"></p-radioButton>
+                    <br><br>
+                    <button pButton type="button" icon="ui-icon-clear " iconPos="left" label="Reset"
+                            (click)="filters.siteType='all';updateUrl();"></button>
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(gender,$event)'
+                        [ngClass]="{'selected-filter': filters.gender!='all'}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Gender</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!gender.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="gender.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #gender (onBeforeShow)="gender.isOpen=true"
+                                (onBeforeHide)="gender.isOpen=false">
+                  <div class="panel-panel">
+                    <p-radioButton name="groupname1" value="all"
+                                   label="Male or Female"
+                                   [(ngModel)]="filters.gender"
+                                   (ngModelChange)="onSiteTypeChange()"></p-radioButton>
+
+                    <br><br>
+                    <p-radioButton name="groupname1" value="male"
+                                   label="Male"
+                                   [(ngModel)]="filters.gender"
+                                   (ngModelChange)="onSiteTypeChange()"></p-radioButton>
+
+
+                    <br><br>
+                    <p-radioButton name="groupname1" value="female"
+                                   label="Female"
+                                   [(ngModel)]="filters.gender"
+                                   (ngModelChange)="onSiteTypeChange()"></p-radioButton>
+                    <br><br>
+                    <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                            (click)="filters.gender='all'"></button>
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+            </div>
+
+            <div fxFlex.xs="100%" fxFlex.lg="50%" class="centered">
+              <div  [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                    [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                    [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                    [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(ages,$event)'
+                        [ngClass]="{'selected-filter': filters.ages[0]!=18 || filters.ages[1]!=65}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+
+                        <td>Ages</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!ages.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="ages.isOpen">keyboard_arrow_up</i>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #ages (onBeforeShow)="ages.isOpen=true"
+                                (onBeforeHide)="ages.isOpen=false">
+                  <div class="panel-panel">
+                    <p class="normal-color">From {{filters.ages[0]|number}} to {{filters.ages[1]|number}}
+                    <span class="normal-color"
+                          *ngIf="filters.ages[1]==65">+</span></p>
+                    <p-slider [(ngModel)]="filters.ages" [min]="18" [max]="65"
+                              [range]="true"
+                              (onSlideEnd)="updateUrl()" name="ages"></p-slider>
+                    <br><br>
+                    <button (click)="filters.ages=[18,65]" pButton type="button" icon="ui-icon-clear" iconPos="left"
+                            label="Reset"></button>
+                  </div>
+                </p-overlayPanel>
+              </div>
+              <div  [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                    [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                    [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                    [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(dailyLikes,$event)'
+                        [ngClass]="{'selected-filter': filters.dailyLikes[0]!=0 || filters.dailyLikes[1]!=1000}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Daily Likes</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!dailyLikes.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="dailyLikes.isOpen">keyboard_arrow_up</i>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #dailyLikes (onBeforeShow)="dailyLikes.isOpen=true"
+                                (onBeforeHide)="dailyLikes.isOpen=false">
+                  <div class="panel-panel">
+
+                    <p class="normal-color">From {{filters.dailyLikes[0]|number}} to {{filters.dailyLikes[1]|number}} <span
+                            class="normal-color" *ngIf="filters.dailyLikes[1]==1000">+</span></p>
+                    <p-slider [(ngModel)]="filters.dailyLikes" [min]="0" [max]="1000"
+                              [range]="true"
+                              (onSlideEnd)="updateUrl()" name="dailyLikes"></p-slider>
+                    <br><br>
+                    <button (click)="filters.dailyLikes=[0,1000]" pButton type="button" icon="ui-icon-clear" iconPos="left"
+                            label="Reset"></button>
+                  </div>
+                </p-overlayPanel>
+              </div>
+            </div>
+        </div>
+
+        <div fxFlex="100%"  fxLayout="column" fxLayout.lg="row">
+            <div fxFlex="100%" fxFlex.lg="50%" class="centered">
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(totalLikes,$event)'
+                        [ngClass]="{'selected-filter': filters.totalLikes[0]!=0 || filters.totalLikes[1]!=100000}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Total likes</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!totalLikes.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="totalLikes.isOpen">keyboard_arrow_up</i>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #totalLikes (onBeforeShow)="totalLikes.isOpen=true"
+                                (onBeforeHide)="totalLikes.isOpen=false">
+                  <div class="panel-panel">
+
+                    <p class="normal-color">From {{filters.totalLikes[0]|number}} to {{filters.totalLikes[1]|number}} <span
+                      class="normal-color" *ngIf="filters.totalLikes[1]==100000">+</span></p>
+                    <p-slider [(ngModel)]="filters.totalLikes" [min]="0" [max]="100000"
+                              [range]="true"
+                              (onSlideEnd)="updateUrl()" name="totalLikes"></p-slider>
+                    <br><br>
+                    <button (click)="filters.totalLikes=[0,100000]" pButton type="button" icon="ui-icon-clear" iconPos="left"
+                            label="Reset"></button>
+                  </div>
+                </p-overlayPanel>
+              </div>
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(mediaType,$event)'
+                        [ngClass]="{'selected-filter': filters.mediaType!='all'}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Media type</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!mediaType.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="mediaType.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #mediaType (onBeforeShow)="mediaType.isOpen=true"
+                                (onBeforeHide)="mediaType.isOpen=false">
+                  <div class="panel-panel">
+                    <p-radioButton name="groupname" value="all"
+                                   label="Video or Photo"
+                                   [(ngModel)]="filters.mediaType"
+                                   (ngModelChange)="updateUrl()"></p-radioButton>
+                    <br><br>
+                    <p-radioButton name="groupname" value="video"
+                                   label="Video"
+                                   [(ngModel)]="filters.mediaType"
+                                   (ngModelChange)="updateUrl()"></p-radioButton>
+
+                    <br><br>
+                    <p-radioButton name="groupname" value="photo"
+                                   label="Photo"
+                                   [(ngModel)]="filters.mediaType"
+                                   (ngModelChange)="updateUrl()"></p-radioButton>
+                    <br><br>
+                    <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                            (click)="filters.mediaType='all';updateUrl()"></button>
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+            </div>
+
+            <div fxFlex="100%" fxFlex.lg="50%" class="centered">
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(seenAfter,$event)'
+                        [ngClass]="{'selected-filter': seenAfterDate!=null}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Seen After</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!seenAfter.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="seenAfter.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #seenAfter (onBeforeShow)="seenAfter.isOpen=true"
+                                (onBeforeHide)="seenAfter.isOpen=false">
+                  <div class="panel-panel">
+                    <p-calendar [monthNavigator]="true" [inline]="true" [yearRange]="'2000:2020'" [yearNavigator]="true"
+                                [placeholder]="'Enter Date'" [(ngModel)]="seenAfterDate" (onSelect)="updateUrl()"
+                                (onBlur)="updateUrl()"
+                                dateFormat="dd-M-yy"
+                                [ngModelOptions]="{standalone: true}"></p-calendar>
+                    <br><br>
+                    <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                            (click)="seenAfterDate=null;updateUrl()"></button>
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}"
+                   *ngIf="_adsLibService.labels&&_adsLibService.labels.length>0" >
+                <button pButton class="btntr" type="button" (click)=' toggle(label,$event)'
+                        [ngClass]="{'selected-filter': filters.label!=null}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Labels</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!label.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="label.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <br>
+                <p-overlayPanel #label (onBeforeShow)="label.isOpen=true"
+                                (onBeforeHide)="label.isOpen=false">
+                  <div class="panel-panel">
+                    <p-listbox [filter]="true" [style]="{'height':'200px'}" [options]="_adsLibService.labels"
+                               [(ngModel)]="filters.label" (click)="updateUrl()">
+                    </p-listbox>
+                    <br><br>
+                    <div fxLayout='row'>
+                      <div fxFlex="47">
+                        <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                                (click)="filters.label=null;updateUrl()"></button>
+                      </div>
+                      <div fxFlex="6"></div>
+                      <div fxFlex="47">
+                        <fb-edit-labels></fb-edit-labels>
+                      </div>
+                    </div>
+                  </div>
+                </p-overlayPanel>
+              </div>
+            </div>
+        </div>
+
+        <div fxFlex="100%"  fxLayout="column" fxLayout.lg="row">
+            <div fxFlex="100%" fxFlex.lg="50%" class="centered">
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}"
+                   *ngIf="_adsLibService.affNetworks &&_adsLibService.affNetworks.length>0">
+                <button pButton class="btntr" type="button" (click)='toggle(affNetwork,$event)'
+                        [ngClass]="{'selected-filter': filters.affNetwork!=null}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Networks</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!affNetwork.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="affNetwork.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <br>
+                <p-overlayPanel #affNetwork (onBeforeShow)="affNetwork.isOpen=true"
+                                (onBeforeHide)="affNetwork.isOpen=false">
+
+                  <div class="panel-panel">
+
+                    <p-listbox [filter]="true" [style]="{'height':'200px'}" [options]="_adsLibService.affNetworks"
+                               [(ngModel)]="filters.affNetwork" (click)="updateUrl()"></p-listbox>
+
+                    <br><br>
+                    <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                            (click)="filters.affNetwork = null;updateUrl()"></button>
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(affId,$event)'
+                        [ngClass]="{'selected-filter': filters.affId!=null}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Affiliate ID</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!affId.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="affId.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #affId (onBeforeShow)="affId.isOpen=true; affIdEditable= filters.affId;"
+                                (onBeforeHide)="affId.isOpen=false">
+                  <div class="panel-panel">
+                    <input class="normal-color" type="text" pInputText [(ngModel)]="affIdEditable"/>
+
+                    <br><br>
+                    <table>
+                      <tr>
+                        <td>
+                          <button pButton type="button" label="Go"
+                                  (click)="filters.affId = affIdEditable; updateUrl()"></button>
+                        </td>
+                        <td>
+                          <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                                  (click)="filters.affId = null; affIdEditable=null;updateUrl()"></button>
+                        </td>
+                      </tr>
+                    </table>
+
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+            </div>
+
+            <div fxFlex="100%" fxFlex.lg="50%" class="centered">
+              <div [style.lg]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.md]="{'max-width': '200px', 'margin': 'auto'}"
+                   [style.sm]="{'max-width': '150px', 'margin': 'auto'}"
+                   [style.xs]="{'max-width': '250px', 'margin': 'auto'}">
+                <button pButton class="btntr" type="button" (click)='toggle(offerId,$event)'
+                        [ngClass]="{'selected-filter': filters.offerId!=null}"
+                        label=" ">
+                  <div>
+                    <table>
+                      <tr>
+                        <td>Offer ID</td>
+                        <td>
+                          <i class="material-icons" *ngIf="!offerId.isOpen">keyboard_arrow_down</i>
+                          <i class="material-icons" *ngIf="offerId.isOpen">keyboard_arrow_up</i>
+                        </td>
+
+                      </tr>
+                    </table>
+                  </div>
+                </button>
+                <p-overlayPanel #offerId (onBeforeShow)="offerId.isOpen=true; offerIdEditable = filters.offerId"
+                                (onBeforeHide)="offerId.isOpen=false">
+                  <div class="panel-panel">
+                    <input class="normal-color" type="text" pInputText [(ngModel)]="offerIdEditable"/>
+
+                    <br><br>
+                    <table>
+                      <tr>
+                        <td>
+                          <button pButton type="button" label="Go"
+                                  (click)="filters.offerId = offerIdEditable; updateUrl()"></button>
+                        </td>
+                        <td>
+                          <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Reset"
+                                  (click)="filters.offerId = null; offerIdEditable=null;updateUrl()"></button>
+                        </td>
+                      </tr>
+                    </table>
+
+
+                  </div>
+                </p-overlayPanel>
+              </div>
+            </div>
+        </div>
+
+      </div>
+
+      <div class="ui-g ui-fluid">
+
+        <div class="ui-g-2 centered ">
+          <button pButton type="button" icon="ui-icon-clear" iconPos="left" label="Clear all"
+                  (click)="clearFilters()"
+                  [disabled]="!_adsLibService.getNavFiltersKeys() || _adsLibService.getNavFiltersKeys().length == 0 || _adsLibService.searchQueries.length == 0"></button>
+        </div>
+        <div class="ui-g-2 centered ">
+          <button pButton (click)="undo()" *ngIf="wasCleared" label="Undo" icon="ui-icon-undo"></button>
+        </div>
+      </div>
+      <div class="ui-g ui-fluid" style="margin-left:12px;">
+
+        <div class="ui-g-12 " style=" padding-top:0;padding-bottom:0;">
+          <div *ngFor="let param of _adsLibService.nonCurrentSearches()" class="tag">
+            <table class="normal-color">
+              <tr>
+                <td>
+                  <i *ngIf="param.locked" (click)="param.locked=!param.locked;updateUrl()"
+                     class="fa ui-icon-lock-outline tag-button"></i>
+                  <i *ngIf="!param.locked" (click)="param.locked=!param.locked;updateUrl()"
+                     class="fa ui-icon-lock-open tag-button"></i>
+                </td>
+                <td>
+                  {{_adsLibService.getlabel(param.type)}}: {{param.value}}
+                </td>
+                <td>
+                  <i (click)="removeParam(param)" class="fa ui-icon-clear tag-button"></i>
+                </td>
+              </tr>
+            </table>
+
+
+          </div>
+        </div>
+        <div class="ui-g-12 " style=" padding-top:0;padding-bottom:7px;">
+          <fb-nav-filters *ngIf="_adsLibService.affNetworks" [showClose]="true"></fb-nav-filters>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="fb-container" fxLayout.gt-sm="row" fxLayout.lt-md="column" style="width: 100%; margin-top: 10px;">
+    <div fxFlex="50" fxFlexAlign="center" style="padding-left: 10px;">
+      <p-dropdown [scrollHeight]="100" [options]="orders"
+                  (onChange)="updateUrl()"
+                  [autoWidth]="true"
+                  [(ngModel)]="filters.orderBy"></p-dropdown>
+
+    </div>
+    <div fxFlex="50" fxFlexAlign="center">
+      <fb-searches #searches></fb-searches>
+    </div>
+  </div>
+
+</div>
+
+
+
+

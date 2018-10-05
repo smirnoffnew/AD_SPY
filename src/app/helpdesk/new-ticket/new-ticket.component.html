@@ -1,0 +1,57 @@
+<div class="fb-container-centered space-on-top card card-w-title card-padding shadow-box ui-shadow-3">
+  <h1>Create New Ticket</h1>
+  <form (ngSubmit)="createTicket()" #createTicketForm="ngForm">
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="50%" fxFlex.lt-sm="100%">
+        <span class="md-inputfield space-on-top">
+          <input type="text"
+                 pInputText
+                 name="subject"
+                 [ngStyle]="{'width': '100%'}"
+                 required
+                 [(ngModel)]="model.subject"
+                 #subject="ngModel">
+          <label>Subject</label>
+        </span>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="50%" fxFlex.lt-sm="100%">
+        <span class="md-inputfield space-on-top">
+          <textarea pInputTextarea
+                    name="text"
+                    required
+                    [rows]="7"
+                    [ngStyle]="{'width': '100%'}"
+                    placeholder="Text"
+                    [(ngModel)]="model.text">
+          </textarea>
+        </span>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="50%" fxFlex.lt-sm="100%">
+        <span class="md-inputfield space-on-top">
+          <button type="submit"
+                  pButton
+                  label="Submit"
+                  icon="ui-icon-done"
+                  [disabled]="!createTicketForm.valid || _restService.isLoading()">
+            <span class="ui-button-text ui-c" *ngIf="_restService.isLoading()">Loading...</span>
+          </button>
+
+          <button type="button"
+                  [routerLink]="['/helpdesk']"
+                  pButton
+                  label="Back"
+                  icon="ui-icon-replay">
+          </button>
+        </span>
+      </div>
+    </div>
+
+  </form>
+</div>

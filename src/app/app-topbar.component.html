@@ -1,0 +1,47 @@
+<div class="topbar clearfix">
+  <div class="logo">
+    <a routerLink='/' >
+      <img src="assets/images/logo.png" style="width: 150px; padding: 10px;">
+    </a>
+  </div>
+  <a id="topbar-menu-button" href="#" (click)="onTopbarMenuButtonClick($event)">
+    <i class="material-icons">menu</i>
+  </a>
+
+  <ul class="topbar-menu fadeInDown" [ngClass]="{'topbar-menu-visible': topbarMenuActive}">
+    <li *ngIf="!_authService.getIsLoggedIn()" #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+      <a routerLink='/login'>
+        <div style="line-height: 30px;" >Login</div>
+      </a>
+    </li>
+    <li *ngIf="!_authService.getIsLoggedIn()" #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+      <a routerLink='/subscribe'>
+        <div style="line-height: 30px;" >Subscribe</div>
+      </a>
+    </li>
+
+    <li *ngIf="_authService.getIsLoggedIn()" #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+      <a routerLink='/'>
+        <div style="line-height: 30px;" (click)="_authService.logout()">Logout</div>
+      </a>
+    </li>
+    <li *ngIf="_authService.getIsLoggedIn()" #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+      <a routerLink='/helpdesk'>
+        <div style="line-height: 30px;">Help Centre</div>
+      </a>
+    </li>
+    <li *ngIf="_authService.getIsLoggedIn()" #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+      <a routerLink='/account'>
+        <div style="line-height: 30px;">My Account</div>
+      </a>
+    </li>
+    <li *ngIf="_authService.getIsLoggedIn()" #settings [ngClass]="{'active-topmenuitem':app.activeTopbarItem === settings}">
+      <a routerLink='/ads'>
+        <div style="line-height: 30px;">Ad Search</div>
+      </a>
+    </li>
+    <li routerLinkActive="active" *ngIf="_authService.isLoadingUser() || _restService.isLoading()">
+      <img src="../assets/images/loading-indicator.gif" alt="loading..." style="height: 40px;">
+    </li>
+  </ul>
+</div>

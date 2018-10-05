@@ -1,0 +1,45 @@
+.our-reply {
+  color: #0b97c4;
+}
+.ticket-box {
+  border: 1px solid grey;
+  padding: 5px;
+  margin: 3px;
+  border-radius: 10px;
+}
+.ticket-date {
+  color: darkblue;
+}
+.line-breaker {
+  white-space: pre-line;
+}
+
+.custom-h1{
+  margin-bottom: 0;
+  display: inline-block;
+}
+.dotted-above-line {
+  border-top: 1px dotted #000;
+}
+/*todo: a candidate for global style*/
+.space-on-top {
+  margin-top: 30px;
+}
+/*todo: a candidate for global style*/
+.space-on-right {
+  margin-right: 25px;
+}
+/*todo: a candidate for global style*/
+.line-padding {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+/*todo: a candidate for global style*/
+.card-padding {
+  padding-left: 35px;
+  padding-right: 35px;
+}
+/*todo: a candidate for global style*/
+.right {
+text-align:right;
+}

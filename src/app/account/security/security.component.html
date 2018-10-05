@@ -1,0 +1,81 @@
+<div class="fb-container-centered card  account-border-element account-card-padding">
+  <div fxLayout.gt-sm="row"
+       fxLayout="column">
+    <div fxFlex="20">
+      <div class="custom-title">Security</div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="space-between center"
+         fxFlex="80"
+         *ngIf="!changingPassword">
+      <div>
+        Use this if you want to change you password of current account
+      </div>
+      <div>
+        <i class="fa ui-icon-chevron-right chevron" (click)="changingPassword=true;"></i>
+      </div>
+    </div>
+    <div fxLayout="column"
+         fxFlex="80"
+         *ngIf="changingPassword">
+      <div fxLayout="row"
+           fxLayoutAlign="space-between start">
+        <form (ngSubmit)="changePassword()"
+              #changePasswordForm="ngForm"
+              fxLayout="column"
+              *ngIf="changingPassword">
+          <div class="md-inputfield space-on-top">
+            <input type="password"
+                   name="currentPassword"
+                   required
+                   pInputText
+                   [(ngModel)]="model.currentPassword">
+            <label>Enter current password</label>
+          </div>
+
+          <div class="md-inputfield space-on-top">
+            <input type="password"
+                   name="newPassword"
+                   required
+                   pInputText
+                   [(ngModel)]="model.newPassword">
+            <label>Enter new password</label>
+          </div>
+          <div class="md-inputfield space-on-top">
+            <input type="password"
+                   name="repeatNewPassword"
+                   pInputText
+                   [(ngModel)]="model.repeatNewPassword"
+                   [ngClass]="{'ng-invalid': model.repeatNewPassword && model.repeatNewPassword!=model.newPassword}">
+            <label>Repeat new password</label>
+            <div *ngIf='model.repeatNewPassword && model.repeatNewPassword!=model.newPassword'
+                 class="ui-message ui-messages-error ui-corner-all">
+              passwords must match
+            </div>
+          </div>
+
+          <div class="space-on-top">
+            <button type="submit"
+                    pButton
+                    label="Submit"
+                    icon="ui-icon-done"
+                    [disabled]="!changePasswordForm.form.valid ||
+                                _restService.isLoading() ||
+                                (model.newPassword!=model.repeatNewPassword)">
+            </button>
+
+          </div>
+        </form>
+        <button *ngIf="changingPassword"
+                type="button"
+                (click)="changingPassword=false;"
+                pButton
+                label="Close"
+                icon="ui-icon-replay">
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

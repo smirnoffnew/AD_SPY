@@ -1,0 +1,17 @@
+<p-dialog header="Submit Bug Report" [(visible)]="displayReportBug" modal="modal" [responsive]="true" [closable]="false">
+  <form #form1="ngForm" (ngSubmit)="submitBugReport()">
+    <div class="form-group">
+      <label>Please describe the issue</label>
+      <textarea [(ngModel)]="issue" maxlength="2000" name="labelName" class="form-control" required cols="30" rows="10"></textarea>
+    </div>
+
+    <p-footer>
+      <button type="submit" class="btn btn-primary"
+              [disabled]="!form1.form.valid|| _restService.isLoading()">Submit
+      </button>
+      <a class="btn btn-default" (click)="close()"
+              [hidden]="_restService.isLoading()">Cancel1
+      </a>
+    </p-footer>
+  </form>
+</p-dialog>

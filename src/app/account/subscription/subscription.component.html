@@ -1,0 +1,233 @@
+<div class="fb-container-centered card  account-border-element account-card-padding">
+  <div fxLayout.gt-sm="row"
+       fxLayout="column" >
+    <div fxFlex="20">
+      <div class="custom-title">Subscription</div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="space-between center"
+         fxFlex="80"
+         *ngIf="!showSubscriptionInfo">
+
+      <div *ngIf="_restService.isLoading()">
+       Loading...
+      </div>
+
+      <div *ngIf="!_restService.isLoading() && _authService.getUser()?.viewsLeft" >
+        <span [innerHtml]=" 'Views Left: ' + _authService.getUser().viewsLeft"></span>
+      </div>
+
+      <div >
+        <i class="fa ui-icon-chevron-right chevron" (click)="showSubscriptionInfo=true;"></i>
+      </div>
+
+    </div>
+
+    <div fxLayout="column"
+         fxFlex="80"
+         *ngIf="showSubscriptionInfo"  >
+      <div *ngIf="_authService.getUser()">
+
+        <div fxLayout="row"  fxLayoutAlign="space-between center">
+          <div *ngIf="_authService.getUser()?.viewsLeft">
+            Views Left {{_authService.getUser().viewsLeft}}
+          </div>
+
+          <button type="button"
+                  *ngIf="_authService.getUser()?.viewsLeft"
+                  (click)="showSubscriptionInfo=false;"
+                  pButton
+                  class="space-on-right"
+                  label="Close"
+                  icon="ui-icon-replay">
+          </button>
+        </div>
+
+        <div *ngIf="_authService.getUser().subscription">
+          <h3>Your monthly paid subscription</h3>
+          <table border="1">
+            <tr>
+              <td>Subscription started:</td>
+              <td class="centered " [innerHtml]="_authService.getUser().currentPeriodStart| date"></td>
+            </tr>
+            <tr>
+              <td>Subscription ends:</td>
+              <td class="centered" [innerHtml]="_authService.getUser().currentPeriodEnd| date"></td>
+            </tr>
+            <tr>
+              <td>Subscription Limit:</td>
+              <td class="centered" [innerHtml]="_authService.getUser().viewsLimit"></td>
+            </tr>
+            <tr>
+              <td>Used</td>
+              <td class="centered" [innerHtml]="_authService.getUser().viewsCurrentPeriod"></td>
+            </tr>
+            <tr>
+              <td>Left</td>
+              <td  fxLayout="column" class="centered">
+                {{_authService.getUser().viewsLeft}}
+                <button pButton (click)="displayBuyMoreViews=true"
+                        label="Buy {{_accountService.getConfig()?.additionalViewsLimit}} views"
+                        *ngIf="_authService.getUser().viewsLeft < _accountService.getConfig()?.viewsLimit
+                               && _authService.getUser().stripeCustomerId
+                               && !_authService.getUser().isOutdated
+                               ">
+                </button>
+              </td>
+            </tr>
+
+          </table>
+
+          <br>
+        </div>
+        <div *ngIf="_authService.getUser().isOutdated">
+          <h3>You need to renew your subscription. Please check your inbox for an email from Stripe</h3>
+        </div>
+        <div *ngIf="!_authService.getUser().subscription">
+          <h3>Subscribe for monthly package for ${{_accountService.getConfig()?.price}} USD</h3>
+          <label>
+            <p-checkbox label="Agree " binary="true" [(ngModel)]="agree"></p-checkbox>
+            <a href="https://termsfeed.com/blog/sample-terms-and-conditions-template/" target="_blank">to terms</a>
+          </label>
+          <button type="button"
+                  pButton
+                  label="Purchase"
+                  [disabled]="stripeActive || !agree"
+                  (click)="openCheckout()">
+          </button>
+        </div>
+
+        <div *ngIf="_authService.getUser().coupon" >
+          <h3>Your current coupon</h3>
+          <table border="1">
+            <tr>
+              <td>Coupon name</td>
+              <td>Monthly?</td>
+              <td>Amount</td>
+            </tr>
+
+            <tr>
+              <td> {{_authService.getUser().coupon.id }}</td>
+              <td>
+                <span *ngIf="_authService.getUser().coupon.isMonthly">YES</span>
+                <span *ngIf="!_authService.getUser().coupon.isMonthly">NO</span>
+              </td>
+              <td>{{_authService.getUser().coupon.viewsAmount }}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!--Enter a coupon part-->
+        <div class="custom-title space-on-top">Enter a coupon</div>
+
+        <form (ngSubmit)="applyCoupon()" #enterCouponForm="ngForm" fxLayout="column">
+          <div class="md-inputfield space-on-top">
+            <input pInputText [(ngModel)]="coupon" name="coupon" required>
+            <label>Coupon</label>
+            <div *ngIf='!couponValid && !_restService.isLoading()'>
+              This coupon is invalid
+            </div>
+          </div>
+          <div class="space-on-top">
+            <button type="submit"
+                    pButton
+                    label="Apply coupon"
+                    icon="ui-icon-email"
+                    [disabled]="!enterCouponForm.form.valid
+                      || _restService.isLoading()
+                      || !couponValid">
+            </button>
+          </div>
+        </form>
+
+        <!--View History part-->
+        <div class="space-on-top" *ngIf="_authService.getUser().stripeCustomerId">
+          <button type="button"
+                  pButton
+                  label="View History"
+                  [routerLink]="['/account/history']">
+          </button>
+          <div fxFlex="10px"></div>
+          <button type="button"
+                  pButton
+                  label="Cancel Subscription"
+                  class="amber-btn"
+                  (click)="displayRemoveSubscription=true;">
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <p-dialog header="Remove Subscription?" [(visible)]="displayRemoveSubscription" modal="modal" [responsive]="true">
+      <p-footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+          <button type="button"
+                  pButton
+                  label="Yes, Remove"
+                  class="amber-btn"
+                  (click)="cancelSubscription();displayRemoveSubscription=false;"
+                  [disabled]="_restService.isLoading()">
+          </button>
+          <button type="button"
+                  pButton
+                  label="Go Back"
+                  class="btn btn-default btn-sm"
+                  (click)="displayRemoveSubscription = false;">
+          </button>
+        </div>
+      </p-footer>
+    </p-dialog>
+
+    <p-dialog header="Thanks for subscribing, enjoy!" [(visible)]="displayThanks" modal="modal" [responsive]="true">
+      <p>We hope you will like our service.</p>
+      <p-footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+          <button type="button"
+                  pButton
+                  label="Close"
+                  class="btn btn-default btn-sm"
+                  (click)="redirectToAds();displayThanks=false;">
+          </button>
+        </div>
+      </p-footer>
+    </p-dialog>
+
+    <p-dialog header="Views bought" [(visible)]="displayBuyMoreViewsConfirmation" modal="modal" [responsive]="true">
+      <p>Thanks for buying additional views</p>
+      <p-footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+          <button type="button"
+                  pButton
+                  label="Close"
+                  class="btn btn-default btn-sm"
+                  (click)="displayBuyMoreViewsConfirmation=false;">
+          </button>
+        </div>
+      </p-footer>
+    </p-dialog>
+
+    <p-dialog header="Buy Additional views?" [(visible)]="displayBuyMoreViews" modal="modal" [responsive]="true">
+      <p>Explanation...</p>
+      <p-footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+
+          <button type="button"
+                  pButton
+                  (click)="buyViews();displayBuyMoreViews=false;"
+                  [disabled]="_restService.isLoading()"
+                  label="Yes, buy {{_accountService.getConfig()?.additionalViewsLimit}} views for ${{_accountService.getConfig()?.additionalViewsPrice}}">
+          </button>
+
+          <button type="button"
+                  pButton
+                  label="Back"
+                  icon="ui-icon-replay"
+                  (click)="displayBuyMoreViews=false;">
+          </button>
+        </div>
+      </p-footer>
+    </p-dialog>
+
+  </div>
+</div>

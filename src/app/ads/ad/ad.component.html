@@ -1,0 +1,344 @@
+<div class="ad-outer-box">
+
+  <table width="100%">
+    <tr>
+      <td style="width: 30px;">
+        <img *ngIf="ad.isIg" src="../../../assets/images/ig-logo.png" class="logo-icon" alt="Instagram">
+        <img *ngIf="!ad.isIg" src="../../../assets/images/fb-logo.png" class="logo-icon" alt="Facebook">
+      </td>
+
+      <td style="width: 46px; padding: 3px; white-space: nowrap;">
+
+        <a *ngIf="!details" [routerLink]="['/ads',{searches:actorLink(ad.actor)}]">
+          <img [src]="ad.actor.s3ProfilePictureName" alt=""
+               style="width: 40px; border: 1px solid #cccccc">
+        </a>
+        <img *ngIf="details" [src]="ad.actor.s3ProfilePictureName" alt=""
+             style="width: 40px; border: 1px solid #cccccc">
+      </td>
+
+      <td style="vertical-align: top; text-align: left; width: 100px; white-space: nowrap;">
+
+        <a *ngIf="!details" [routerLink]="['/ads',{searches:actorLink(ad.actor)}]" class="fb-blue clickable"
+           style="font-weight: bold; font-size: 14px;">
+          {{ad.actor.name}}
+        </a>
+          <span *ngIf="details">
+          {{ad.actor.name}}
+          </span>
+        <br>
+            <span pTooltip="{{ad.createdOn | date:'medium'}}"
+                  tooltipPosition="bottom">{{ad.createdOn|date}}</span>
+        <span style="width: 20px">
+          <img *ngIf="ad.privacyScope=='Public'" src="./assets/images/public-scope.png" alt="Public" title="Public">
+        <img *ngIf="ad.privacyScope=='Custom'" src="./assets/images/custom-scope.png" alt="Custom" title="Custom">
+        </span>
+
+      </td>
+      <td style="text-align: right; width: calc(100% - 200px) ;">
+        <a *ngIf="!details" [routerLink]="['/ads',ad.id]">
+          <i class="fa ui-icon-info-outline corner-icon"></i>
+        </a>
+        <a target="_blank" [href]="ad.linkToAd">
+          <i class="fa ui-icon-call-made corner-icon"></i>
+        </a>
+        <a *ngIf="details" (click)="ad.displayReportBug=true" title="Report a problem with this ad">
+          <i class="fa ui-icon-error-outline corner-icon"></i>
+        </a>
+      </td>
+    </tr>
+  </table>
+  <div style="font-size: 14px; color: #1d2129; margin: 10px 0" [innerHtml]="ad.text">
+
+  </div>
+  <a [attr.exthref]="ad.mainAttachment.attachmentUrl"
+     [routerLink]="['/ads',ad.id]"
+     *ngIf="ad.mainAttachment && ad.adType!='Multi'">
+    <video *ngIf="ad.adType=='Video'" controls [poster]="ad.mainAttachment.imageUrl" width="100%"
+           preload="none">
+      <source [src]="ad.mainAttachment.videoUrl" type="video/mp4">
+    </video>
+
+
+    <div *ngIf="ad.mainAttachment && ad.adType!='Video' && ad.mainAttachment.imageUrl">
+      <img *ngIf="!ad.showMainAttachment" style="; height: 400px;"
+           src="../../../assets/images/placeholder.jpg" alt="">
+      <img [src]="ad.mainAttachment.imageUrl"
+           (load)="showMainAttachment()"
+           [hidden]="!ad.showMainAttachment " alt=""
+           style=";">
+    </div>
+  </a>
+
+  <div
+    *ngIf="ad.mainAttachment !=null && (ad.mainAttachment.actionLinkLinkTitle||ad.mainAttachment.attachmentTitle) && ad.adType!='Multi'"
+    style="; padding: 10px; border: 1px solid; border-color: #e9ebee #e9ebee #d1d1d1">
+    <a
+      [routerLink]="['/ads',ad.id]"
+      [attr.exthref]='ad.mainAttachment.actionLinkUrl?ad.mainAttachment.actionLinkUrl:ad.mainAttachment.attachmentUrl'
+    >
+
+      <div class="actionLinkLinkTitle">
+        {{ad.mainAttachment.actionLinkLinkTitle}}{{ad.mainAttachment.attachmentTitle}}
+      </div>
+      <div class="actionLinkLinkDescription">
+        {{ad.mainAttachment.actionLinkLinkDescription}}{{ad.mainAttachment.attachmentDescr}}
+
+      </div>
+    </a>
+    <table style="width:100%;">
+      <tr>
+        <td style="width:70%; margin-right: 10px; white-space: nowrap;
+                overflow: hidden; color: #90949c;font-size: 11px;text-transform: uppercase;
+               word-wrap: break-word;">
+          {{ad.mainAttachment.actionLinkLinkDisplay }}
+              <span *ngIf="ad.mainAttachment.attachmentSource!=ad.mainAttachment.actionLinkLinkDisplay">
+              {{ad.mainAttachment.attachmentSource}}
+              </span>
+
+        </td>
+        <td style="width:30%;text-align: right;" *ngIf="ad.mainAttachment.actionLinkTitle">
+          <a [routerLink]="['/ads',ad.id]"
+             [attr.exthref]='ad.mainAttachment.actionLinkUrl' class="ui-button-primary" pButton type="button"
+             (click)="onclick()"
+             label="{{ad.mainAttachment.actionLinkTitle}}"></a>
+
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div *ngIf="ad.adType=='Multi'" class="slider-container">
+
+    <div class='slick-container'>
+      <div [class]="'slick'+ad.id">
+        <div *ngFor="let sub of  ad.subAttachments; let i = index;" style="background: transparent;">
+          <img [src]="sub.imageUrl" [alt]="sub.imageUrl">
+          <table style="width:100%;">
+            <tr>
+              <td>
+                <div class="actionLinkLinkTitleMulti"
+                     [innerHtml]="sub.actionLinkLinkTitle || sub.attachmentTitle"></div>
+
+                <div class="actionLinkLinkDescriptionMulti">
+                  {{sub.actionLinkLinkDescription||sub.attachmentDescr}}
+                </div>
+              </td>
+              <td style="text-align: right;" *ngIf="sub.actionLinkTitle">
+                <a pButton [routerLink]="['/ads',ad.id]" [label]="sub.actionLinkTitle"
+                   [attr.exthref]='sub.actionLinkUrl'></a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--<div>-->
+    <!--&lt;!&ndash;<div fxLayout="row" fxLayoutAlign="space-between center">&ndash;&gt;-->
+    <!--&lt;!&ndash;<button type="button" icon="ui-icon-arrow-back" pButton (click)="prev()"></button>&ndash;&gt;-->
+    <!--&lt;!&ndash;<div fxFlex></div>&ndash;&gt;-->
+    <!--&lt;!&ndash;<button type="button" icon="ui-icon-arrow-forward" pButton (click)="next()"></button>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--<div *ngFor="let sub of  ad.subAttachments; let i = index;">-->
+    <!--<div *ngIf="i==current">-->
+    <!--<img [src]="sub.imageUrl" [alt]="sub.imageUrl" style="max-height: 400px;">-->
+
+
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+  </div>
+
+  <table class="small-text bottom-table" style="border-top: 1px solid #cccccc; margin-top: 10px;">
+    <tr>
+      <!--likes emoji-->
+      <td>
+        <div class="table-container">
+
+          <div class="emoji-container">
+            <div class="emoticon like" [ngStyle]="{'float' : 'left'}"></div>
+            <div class="line" [ngStyle]="{'line-height' : '18px'}" innerHtml="&nbsp;{{ad.snapshot.likeNum | number }}">
+            </div>
+          </div>
+
+          <div class="emoji-container">
+            <div class="line emoticon love pull-left"
+                 *ngIf="ad.snapshot.loveNum"
+                 pTooltip="{{ad.snapshot.loveNum}}"
+                 tooltipPosition="bottom">
+            </div>
+            <div  class="line emoticon haha pull-left"
+                  *ngIf="ad.snapshot.hahaNum"
+                  pTooltip="{{ad.snapshot.hahaNum}}"
+                  tooltipPosition="bottom">
+            </div>
+            <div  class="line emoticon wow pull-left"
+                  *ngIf="ad.snapshot.wowNum"
+                  pTooltip="{{ad.snapshot.wowNum}}"
+                  tooltipPosition="bottom">
+            </div>
+            <div  class="line emoticon sad pull-left"
+                  *ngIf="ad.snapshot.sadNum"
+                  pTooltip="{{ad.snapshot.sadNum}}"
+                  tooltipPosition="bottom">
+            </div>
+            <div  class="line emoticon angry pull-left"
+                  *ngIf="ad.snapshot.angryNum"
+                  pTooltip="{{ad.snapshot.angryNum}}"
+                  tooltipPosition="bottom">
+            </div>
+          </div>
+
+        </div>
+      </td>
+      <!--comments shares-->
+      <td>
+          <div class="table-container">
+            <div>
+              <span class="icon-bubble"></span>
+              <span innerHtml="{{ad.snapshot.commentsNum | number }} Comments"></span>
+            </div>
+
+            <div class="emoji-container" *ngIf="ad.snapshot.shareNum">
+              <span class="icon-share2"></span>
+              <span innerHtml="{{ad.snapshot.shareNum | number }} Shares "></span>
+            </div>
+          </div>
+      </td>
+      <!--age sex-->
+      <td>
+          <!--age-->
+          <div innerHtml="{{ad.minAge}} {{(ad.minAge!=ad.maxAge) ? ' - ' + ad.maxAge : ''}}"
+               [ngStyle]="{'margin-bottom':'5px'}">
+          </div>
+
+          <!--icons-->
+          <span *ngIf="ad.genders.indexOf('Male')>=0"
+               class="icon-man"
+               tooltipPosition="bottom"
+               pTooltip="male">
+          </span>
+
+          <span *ngIf="ad.genders.indexOf('Female')>=0"
+               class="icon-woman"
+               tooltipPosition="bottom"
+               pTooltip="female">
+          </span>
+
+          <div *ngIf="ad.genders.indexOf('Male')==-1 && ad.genders.indexOf('Female')==-1"
+               tooltipPosition="bottom"
+               pTooltip="Gender unknown">
+            <span class="icon-man"></span>
+            <span>?</span>
+            <span class="icon-woman"></span>
+          </div>
+      </td>
+      <!--countries-->
+      <td>
+        <span *ngFor="let country of ad.countries; let i = index;"
+              innerHtml="{{country}}{{(i > 0)? ', ' : ''}}">
+        </span>
+      </td>
+    </tr>
+  </table>
+
+  <div *ngIf="details">
+    <hr>
+
+    <div>
+      <form style="max-height: 100px;" fxLayout="column">
+        <div class="space-on-top">
+          <p-dropdown name="label"
+                      [scrollHeight]="40"
+                      [style]="{'width':'150px'}"
+                      placeholder="Select a Label"
+                      [options]="_adsLibService.labels"
+                      (onChange)="changeLabel()"
+                      [autoWidth]="true"
+                      [(ngModel)]="ad.labelName">
+          </p-dropdown>
+
+          <!--<select style="max-width:80px;" name="label" [(ngModel)]=""-->
+          <!--(change)="">-->
+          <!--<option *ngFor="let labelName of " [value]="labelName">{{labelName}}-->
+          <!--</option>-->
+          <!--</select>-->
+
+          <button pButton
+                  label="Add New Label"
+                  [ngStyle]="{'margin-left':'30px'}"
+                  (click)="displayNewLabel=true">
+          </button>
+
+          <button pButton
+                  *ngIf="ad.labelName && _adsLibService.labels.length>0"
+                  label="Remove Label"
+                  (click)="removeLabel(ad)">
+          </button>
+        </div>
+      </form>
+    </div>
+    <br>
+    <div>
+      <button pButton label="View Best Comments" *ngIf="details && !ad.viewComments &&  ad.comments.length>0"
+              (click)="ad.viewComments = true;">
+      </button>
+      <button pButton label="Hide Comments" *ngIf="ad.viewComments" (click)="ad.viewComments = false;">
+      </button>
+    </div>
+
+  </div>
+  <div *ngIf="ad.viewComments">
+
+    <div *ngFor="let comment of ad.comments" class="small-text">
+      <table>
+        <tr>
+          <td><span class="fb-blue" style="font-weight: bold;">{{comment.userName}}</span></td>
+          <td><span [innerHtml]="comment.text"></span></td>
+          <td>
+            <div class="emoticon like"></div>
+          </td>
+          <td>{{comment.likesNum | number }}</td>
+        </tr>
+      </table>
+
+
+    </div>
+  </div>
+</div>
+
+<p-dialog *ngIf="details" header="Create Label" [(visible)]="displayNewLabel" modal="modal" [responsive]="true">
+  <form #form1="ngForm" (ngSubmit)="saveLabel()" fxLayout="column" fxLayoutAlign="space-between center">
+      <div class="md-inputfield more-space-on-top">
+        <input maxlength="20"
+               pInputText
+               required
+               [(ngModel)]="labelName"
+               name="labelName">
+        <label>Name Your Label</label>
+      </div>
+
+      <div *ngIf="labelError" [innerHtml]="labelError"></div>
+
+      <div class="space-on-top">
+        <button type="submit"
+                pButton
+                label="Save"
+                icon="ui-icon-check"
+                [disabled]="!form1.form.valid|| _restService.isLoading()">
+        </button>
+        <button type="button"
+                (click)="displayNewLabel=false"
+                pButton
+                label="Cancel"
+                icon="ui-icon-close"
+                [disabled]="_restService.isLoading()">
+        </button>
+      </div>
+  </form>
+</p-dialog>
+
+
+
+<fb-report-bug *ngIf="details" (onBugDialogClosed)="onBugDialogClosed($event)" [adId]="ad.id"
+               [displayReportBug]="ad.displayReportBug"></fb-report-bug>

@@ -1,0 +1,128 @@
+<p-confirmDialog header="Close this ticket" icon="fa ui-icon-warning" width="400"></p-confirmDialog>
+<div class="fb-container-centered">
+      <div *ngIf="ticket">
+
+        <div class="card card-w-title card-padding shadow-box ui-shadow-3">
+          <button type="button"
+                  pButton
+                  label="Back"
+                  icon="ui-icon-replay"
+                  class="space-on-right"
+                  [routerLink]="['/helpdesk']">
+          </button>
+          <h1  class="custom-h1" [innerHtml]="ticket.subject"></h1>
+          <div class="space-on-top">
+            <span class="space-on-right">
+              Status:
+              <span *ngIf="ticket.isOpen">Open</span>
+              <span *ngIf="!ticket.isOpen">Closed. Reply to reopen</span>
+            </span>
+            <button type="button"
+                    pButton
+                    label="Close ticket"
+                    icon="ui-icon-done"
+                    [disabled]="loading"
+                    *ngIf="ticket.isOpen"
+                    (click)="confirmCloseTicket()">
+            </button>
+          </div>
+        </div>
+
+        <!--start message-->
+        <div *ngIf="ticket.text" fxLayout="row" fxLayoutAlign="start" >
+
+          <div class="card card-w-title space-on-top card-padding shadow-box ui-shadow-2" fxFlex="80%">
+
+            <!--message header-->
+            <div class="dotted-underline line-padding" [ngStyle]="{'margin-bottom': '1em'}">
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div fxFlex="50px">
+                  <i class="fa ui-icon-account-box" [ngStyle]="{'font-size' : '35px'}"></i>
+                </div>
+                <div fxLayout="row"
+                     fxLayoutWrap="wrap"
+                     fxFlex="80%">
+                  <div fxFlex="100%"  [innerHtml]="'Me'"></div>
+                </div>
+              </div>
+            </div>
+
+            <!--message body-->
+            <span  class="line-breaker" [innerHtml]="ticket.text"></span>
+
+            <!--message footer-->
+            <p class="dotted-above-line line-padding right"
+               pTooltip="{{_libService.local(ticket.repliedOn )| date:'medium'}}"
+               tooltipPosition="bottom"
+               [innerHtml]="_libService.fromNow(ticket.repliedOn )">
+            </p>
+          </div>
+        </div>
+
+
+        <div *ngFor="let message of ticket.messages" fxLayout="row" fxLayoutAlign="{{  message.userReply ? 'start': 'end'}}">
+          <!--message-->
+          <div class="card card-w-title space-on-top card-padding shadow-box ui-shadow-2" fxFlex="80%">
+            <!--message header-->
+            <div class="dotted-underline line-padding" [ngStyle]="{'margin-bottom': '1em'}">
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div fxFlex="50px">
+                  <i *ngIf="message.userReply" class="fa ui-icon-account-box" [ngStyle]="{'font-size' : '35px'}"></i>
+                  <i *ngIf="!message.userReply" class="fa ui-icon-people" [ngStyle]="{'font-size' : '35px'}"></i>
+                </div>
+                <div fxLayout="row"
+                     fxLayoutWrap="wrap"
+                     fxFlex="80%">
+                  <div fxFlex="100%"  innerHtml="{{ message.userReply ? 'Me' : 'AdSpy Support'}}" ></div>
+                </div>
+              </div>
+            </div>
+            <!--message body-->
+            <span class="line-breaker">{{message.text}}</span>
+            <!--message footer-->
+            <p class="dotted-above-line line-padding right"
+               pTooltip="{{_libService.local(message.repliedOn )| date:'medium'}}"
+               tooltipPosition="bottom"
+               [innerHtml]="_libService.fromNow(message.repliedOn )">
+            </p>
+          </div>
+        </div>
+
+        <div class="space-on-top card card-w-title card-padding shadow-box ui-shadow-3">
+          <h1>Reply</h1>
+          <form (ngSubmit)="createMessage(); createMessageForm.reset();"  #createMessageForm="ngForm">
+
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div fxFlex="50%" fxFlex.lt-sm="100%">
+                  <span class="md-inputfield space-on-top">
+                    <textarea pInputTextarea
+                              name="text"
+                              required
+                              [rows]="7"
+                              [ngStyle]="{'width': '100%'}"
+                              placeholder="Text"
+                              [(ngModel)]="model.text">
+                    </textarea>
+                  </span>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="start center">
+                <div fxFlex="50%" fxFlex.lt-sm="100%">
+                  <span class="md-inputfield space-on-top">
+                    <button type="submit"
+                            pButton
+                            label="Submit"
+                            icon="ui-icon-done"
+                            [disabled]="!createMessageForm.valid || _restService.isLoading()">
+                      <span class="ui-button-text ui-c" *ngIf="loading">Loading...</span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+          </form>
+        </div>
+
+      </div>
+</div>

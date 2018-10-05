@@ -1,0 +1,134 @@
+<div class="fb-container-centered">
+  <div fxLayout.lt-md='column'
+       fxLayout.gt-sm='row' fxLayoutAlign.gt-sm="start center">
+    <button type="button"
+            pButton
+            label="Back to ads"
+            icon="ui-icon-clear"
+            iconPos="left"
+            class="space-on-top outer-box-margin"
+            [routerLink]="['/ads']">
+    </button>
+    <div *ngIf="!ad" class="space-on-top outer-box-margin">
+      <h2>Loading...</h2>
+    </div>
+  </div>
+
+  <div fxLayout.lt-md='column' fxLayout.gt-sm='row' *ngIf="ad">
+    <div fxFlex.lt-md="100%" fxFlex.gt-sm="50%">
+      <fb-ad [details]="true" [ad]="ad"></fb-ad>
+
+      <div class="ad-outer-box">
+        <h2>Demographics</h2>
+          <h3>Gender</h3>
+          <p-chart #genderChart type="pie" [data]="genderData" [height]="100"></p-chart>
+          <h3>Countries</h3>
+          <p-chart #countryChart type="pie" [data]="countryData" [height]="100"></p-chart>
+          <h3>Age groups</h3>
+          <p-chart #ageChart type="pie" [data]="ageData" [height]="100"></p-chart>
+      </div>
+
+      <div class="ad-outer-box">
+        <h2>Affiliate Networks Offers</h2>
+        <div>
+          <p-dataTable [value]="ad.offers">
+            <p-column field="affNetwork" header="Affiliate Network"></p-column>
+            <p-column field="affId" header="Affiliate Id"></p-column>
+            <p-column field="offerId" header="Offer Id"></p-column>
+          </p-dataTable>
+        </div>
+        <p>I guess need to include offer URL here...</p>
+      </div>
+    </div>
+
+    <div fxFlex.lt-md="100%"  fxFlex.gt-sm="50%">
+
+      <div class="ad-outer-box" *ngIf="data">
+          <h2>Likes over time</h2>
+          <p-chart #chart type="line" [data]="data" [height]="100"></p-chart>
+      </div>
+
+      <div *ngIf="ad">
+        <div class="ad-outer-box" *ngIf="ad.mainScreenShotFileName || ad.finalUrl || ad.redirectUrls">
+          <div *ngIf="ad.mainScreenShotFileName">
+            <h1>Landing page</h1>
+            <h2>Screenshot</h2>
+            <a [href]="ad.mainScreenShotFileName" target="_blank">
+              <div style="width: 100%;height: 250px;  background-size: cover; border: 2px solid grey;"
+                   [style.background-image]="'url('+ad.mainScreenShotFileName+')'">
+              </div>
+            </a>
+          </div>
+
+          <div *ngIf="ad.finalUrl">
+            <h2>Final URL</h2>
+            <a [href]="ad.finalUrl"
+               [innerHtml]="ad.finalUrl"
+               [ngStyle]="{'word-break': 'break-all'}"
+               target="_blank"
+               class="default-anchor">
+            </a>
+          </div>
+
+          <div *ngIf="ad.redirectUrls">
+            <h2>Redirects</h2>
+            <div *ngFor="let r of ad.redirectUrls">
+              <a [href]="r"
+                 [innerHtml]="r"
+                 [ngStyle]="{'word-break': 'break-all'}"
+                 target="_blank"
+                 class="default-anchor"></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="ad-outer-box" *ngIf="ad.outgoingLinks || ad.techstack">
+          <div *ngIf="ad.outgoingLinks">
+            <h2>Outgoing Links</h2>
+            <p-dataTable [value]="ad.outgoingLinks" expandableRows="true">
+              <p-column field="url" header="Url">
+                <ng-template let-col let-l="rowData" pTemplate="body">
+
+                  <div [innerHtml]="l.url"></div>
+
+                  <button type="button"
+                          pButton
+                          icon="ui-icon-visibility"
+                          label="Redirects"
+                          *ngIf="!l.showRedirects && l.redirects"
+                          (click)="l.showRedirects=true;">
+                  </button>
+
+                  <button type="button"*ngIf="l.showRedirects"
+                          pButton
+                          icon="ui-icon-visibility-off"
+                          label=""
+                          (click)="l.showRedirects=false;">
+                  </button>
+
+                  <div *ngIf="l.showRedirects">
+                    <div [ngStyle]="{'color' : 'green'}" *ngFor="let r of l.redirects">
+                      <div [innerHtml]="r"></div>
+                    </div>
+                  </div>
+
+                </ng-template>
+              </p-column>
+            </p-dataTable>
+          </div>
+
+          <div *ngIf="ad.techstack">
+            <h2>Technology</h2>
+            <p-dataTable [value]="ad.techstack">
+              <p-column field="Type" header="Type"></p-column>
+              <p-column field="Tech" header="Tech"></p-column>
+            </p-dataTable>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

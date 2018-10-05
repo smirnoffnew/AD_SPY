@@ -1,0 +1,64 @@
+$panel-color: #fff;
+#filters {
+  max-width: 1100px;
+  margin: 0 auto;
+
+}
+button table td:nth-child(1){
+  width: 100%; text-align: left;
+}
+#filters>div>div>button{padding: 0; max-width: 130px;}
+#filters label {
+  font-size: 12px !important;
+}
+
+.fb-form-cell-left {
+  width: 100%;
+  padding-right: 3px;
+}
+
+.panel-container {
+  min-height: 300px;
+  justify-content: center;
+  background-size:cover;
+  background: url('../../../assets/images/panel-bg.jpg') ;
+}
+
+.icon {
+  background: transparent !important;
+  box-shadow: none;
+  border: none !important;
+}
+
+table {
+  width: 100%;
+}
+
+table td {
+  text-align: center;
+  white-space: nowrap;
+}
+
+table td:nth-child(3), table td:nth-child(1) {
+  width: 30px;
+}
+
+.panel-panel {
+  padding: 5px;
+  min-width: 200px;
+  text-align: left;
+}
+
+.btntr, .btntr:hover, .btntr:focus, .btntr:visited {
+  color: $panel-color;
+  border: none;
+  border-radius: inherit !important;
+  background: transparent !important;
+  border-bottom: 1px solid $panel-color;
+  outline: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+
+.search-title{margin-top: 15px;}

@@ -1,0 +1,63 @@
+<div class="fb-container-centered card card-w-title shadow-box ui-shadow-2">
+  <h1>Your Support Tickets</h1>
+  <div class="space-on-top">
+    <button type="button"
+            pButton
+            icon="ui-icon-add"
+            label="Create New"
+            [routerLink]="['create']">
+    </button>
+  </div>
+
+    <div *ngIf="_restService.isLoading()">loading...</div>
+    <div *ngIf="!_restService.isLoading()" class="space-on-top">
+
+      <div *ngIf="tickets?.length==0">
+        You don't have support tickets<br><br>
+      </div>
+
+      <p-dataTable *ngIf="tickets?.length>0"
+                   [value]="tickets"
+                   [paginator]="true"
+                   [rows]="10">
+        <p-header>My Tickets</p-header>
+
+        <p-column header="#" [style]="{'width':'4em'}" >
+          <ng-template let-ticket="rowData" pTemplate="body">
+            <a class="default-anchor"
+               [routerLink]="['/helpdesk',ticket.id]"
+               [innerHtml]="ticket.number"
+               [ngStyle]="{'font-weight': '500'}"></a>
+          </ng-template>
+        </p-column>
+
+        <p-column header="Details">
+          <ng-template let-col let-ticket="rowData" pTemplate="body">
+            <strong>
+              <a class="default-anchor ticket-formater"
+                 [routerLink]="['/helpdesk',ticket.id]"
+                 [innerHtml]="ticket.subject"
+                 [ngStyle]="{'text-transform': 'capitalize'}"></a>
+            </strong>
+            &nbsp;
+            <small class="time-styler"
+                  pTooltip="{{_libService.local(ticket.createdOn) | date:'medium'}}"
+                  tooltipPosition="bottom"
+                  [innerHtml]="_libService.fromNow(ticket.createdOn )">
+            </small>
+          </ng-template>
+        </p-column>
+
+        <p-column header="Status" [style]="{'width':'70px'}">
+          <ng-template let-col let-ticket="rowData" pTemplate="body">
+            <div class="centered" *ngIf="ticket.isOpen" >
+              <i [ngStyle]="{'color' : 'red'}" class="fa ui-icon-error" *ngIf="ticket.needAttention "></i>
+              <i class="fa ui-icon-access-time" *ngIf="!ticket.needAttention"></i>
+              <span *ngIf="!ticket.isOpen">(Closed)</span>
+            </div>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+
+    </div>
+</div>

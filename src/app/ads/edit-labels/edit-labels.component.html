@@ -1,0 +1,113 @@
+<button pButton (click)="displayEditLabel=true" label="Edit"
+        [disabled]="!_adsLibService.labels || _adsLibService.labels.length==0">
+
+</button>
+<p-dialog [(visible)]="displayEditLabel" >
+  <p-header>
+    Edit Labels
+  </p-header>
+  <!--_adsLibService.labels {{_adsLibService.labels|json}}-->
+  <!--<table>-->
+    <!--<tr *ngFor="let x of _adsLibService.labels">-->
+      <!--<td>{{x|json}}</td>-->
+    <!--</tr>-->
+  <!--</table>-->
+
+
+  <div>
+    <div *ngIf="editedLabel">
+      Rename editedLabel {{editedLabel |json}}
+      <form (ngSubmit)="saveLabel(editedLabel,editedLabelFinal);editedLabel=null" class="form-inline" #form2="ngForm">
+        <input type="text" maxlength="20" [(ngModel)]="editedLabelFinal" required name="editedLabel">
+        <button type="submit" [disabled]="!form2.form.valid || _restService.isLoading()">Save</button>
+        <button (click)="editedLabel=null">Cancel</button>
+      </form>
+    </div>
+    <div *ngIf="deletedLabel">
+      Confirm Delete {{deletedLabel.value}}?
+      <button (click)="delete(deletedLabel);deletedLabel=null">Delete
+      </button>
+      <button (click)="deletedLabel=null">Cancel</button>
+    </div>
+    <div *ngIf="_adsLibService.labels.length==0">
+      No labels...
+    </div>
+    <table  [hidden]="editedLabel || deletedLabel || !_adsLibService.labels||  _adsLibService.labels.length==0">
+      <thead>
+      <tr>
+        <th>Label Name</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let label of _adsLibService.labels">
+        <td>
+          <div>
+            {{label.label}}
+          </div>
+        </td>
+        <td>
+          <button (click)="editedLabel=label" >Edit</button>
+          <button (click)="deletedLabel=label" >Delete</button>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <!--<p-footer>-->
+    <!--//buttons-->
+  <!--</p-footer>-->
+</p-dialog>
+
+<!--<p-dialog header="Edit Labels" [(visible)]="displayEditLabel1" [responsive]="true">-->
+  <!--<div [hidden]="!_restService.isLoading()">Loading...</div>-->
+  <!--<div [hidden]="_restService.isLoading()">-->
+    <!--<div *ngIf="editedLabel">-->
+      <!--Rename {{editedLabel}}-->
+      <!--<form (ngSubmit)="saveLabel(editedLabel,editedLabelFinal);editedLabel=null" class="form-inline" #form2="ngForm">-->
+        <!--<input type="text" maxlength="20" [(ngModel)]="editedLabelFinal" required name="editedLabel">-->
+        <!--<button class="btn  btn-primary  btn-sm"-->
+                <!--[disabled]="!form2.form.valid || _restService.isLoading()"><i class="fa fa-save"></i></button>-->
+        <!--<button class="btn btn-warning btn-sm"-->
+                <!--(click)="editedLabel=null"><i class="fa fa-undo"></i>-->
+        <!--</button>-->
+      <!--</form>-->
+    <!--</div>-->
+    <!--<div *ngIf="deletedLabel">-->
+      <!--Confirm Delete {{deletedLabel}}?-->
+      <!--<button class="btn btn-danger btn-sm"-->
+              <!--(click)="delete(deletedLabel);deletedLabel=null"><i class="fa fa-remove"></i>-->
+      <!--</button>-->
+      <!--<button class="btn btn-warning btn-sm"-->
+              <!--(click)="deletedLabel=null"><i class="fa fa-undo"></i></button>-->
+    <!--</div>-->
+    <!--<div *ngIf="_adsLibService.labels?.length==0">-->
+      <!--No labels...-->
+    <!--</div>-->
+    <!--<table class="table-condensed"-->
+           <!--[hidden]="editedLabel || deletedLabel || _adsLibService.labels||  _adsLibService.labels.length==0">-->
+      <!--<thead>-->
+      <!--<tr>-->
+        <!--<th>Label Name</th>-->
+        <!--<th></th>-->
+      <!--</tr>-->
+      <!--</thead>-->
+      <!--<tbody>-->
+      <!--<tr *ngFor="let label of _adsLibService.labels">-->
+        <!--<td>-->
+          <!--<div>-->
+            <!--{{label}}-->
+          <!--</div>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<button (click)="editedLabel=label" class="btn  btn-primary  btn-sm"><i class="fa fa-pencil"></i></button>-->
+          <!--<button (click)="deletedLabel=label+''" class="btn  btn-danger btn-sm"><i class="fa fa-remove"></i></button>-->
+        <!--</td>-->
+
+      <!--</tr>-->
+      <!--</tbody>-->
+    <!--</table>-->
+  <!--</div>-->
+<!--</p-dialog>-->
+

@@ -1,0 +1,5 @@
+<div>
+  <div *ngFor="let search of  getSearchParams()" >
+    {{_adsLibService.getlabel(search.type)}}: {{search.value}} <span *ngIf="search.locked">, locked</span>
+  </div>
+</div>

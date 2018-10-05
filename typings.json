@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "chart.js": "registry:dt/chart.js#0.0.0+20161013133057"
+  }
+}

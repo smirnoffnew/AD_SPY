@@ -1,0 +1,35 @@
+<fb-panel (onNavFiltersReady)="onNavFiltersReady($event)" *ngIf="currentParams"></fb-panel>
+<div class="ads-grey-bg">
+  <div infinite-scroll
+       [infiniteScrollDistance]="scrollDistance"
+       [infiniteScrollThrottle]="throttle"
+       (scrolled)="onScrollDown()">
+    <div fxLayout="row" fxLayoutAlign="center center" >
+      <div fxLayout="row" fxHide.lt-md fxLayoutAlign="center start " class="fb-container-centered">
+        <div fxLayout="column" fxFlex="50" >
+          <div *ngFor="let ad of ads  | evenOdd:'even'">
+            <fb-ad [ad]="ad"></fb-ad>
+          </div>
+        </div>
+        <div fxLayout="column" fxFlex="50">
+          <div *ngFor="let ad of ads  | evenOdd:'odd'">
+            <fb-ad [ad]="ad"></fb-ad>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="column" fxHide.gt-sm fxLayoutAlign="center center" >
+        <div *ngFor="let ad of ads">
+          <fb-ad [ad]="ad"></fb-ad>
+        </div>
+      </div>
+
+    </div>
+    <fb-loading-ads *ngIf="loadingAds"></fb-loading-ads>
+  </div>
+  <h1 *ngIf="emptyResult">No Results</h1>
+  <script>
+    $('.carousel-control').click(function (e) {
+      e.preventDefault();
+    });
+  </script>
+</div>

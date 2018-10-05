@@ -1,0 +1,10 @@
+<div class="layout-wrapper" [ngClass]="{'layout-wrapper-menu-active':sidebarActive,
+                                        'layout-overlay-menu':overlay}">
+  <app-topbar></app-topbar>
+  <div style="padding-top: 60px;">
+    <router-outlet></router-outlet>
+  </div>
+  <div>
+    <p-growl [(value)]="_growlService.messages" [immutable]= "false" [life]="5000"></p-growl>
+  </div>
+</div>

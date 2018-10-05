@@ -1,0 +1,58 @@
+<div class="login-body" >
+
+  <div class="login-panel ui-fluid">
+    <div class="ui-g">
+
+      <div class="ui-g-12 login-header">
+        <h1>Login</h1>
+      </div>
+
+      <form (ngSubmit)="login()" #loginForm="ngForm">
+
+        <div class="ui-g-12">
+          <span class="md-inputfield">
+              <input type="text"
+                     pInputText
+                     required
+                     name="userName"
+                     [(ngModel)]="model.userName"
+                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$">
+              <label>Username</label>
+          </span>
+        </div>
+        <div class="ui-g-12">
+          <span class="md-inputfield">
+              <input type="password"
+                     pInputText
+                     required
+                     name="password"
+                     [(ngModel)]="model.password">
+              <label>Password</label>
+          </span>
+        </div>
+
+        <div class="ui-g-12">
+          <button type="submit"
+                  pButton
+                  class="ui-button-text-icon-left"
+                  [disabled]="!loginForm.form.valid || loading">
+            <span class="ui-button-icon-left ui-c fa fa-fw ui-icon-person"></span>
+            <span class="ui-button-text ui-c" [hidden]="!loading">Loading...</span>
+            <span class="ui-button-text ui-c" [hidden]="loading">Sign In </span>
+          </button>
+        </div>
+
+        <div class="ui-g-12 errors-container centered">
+          <div class="error-msg centered">
+            <div class="text-container">{{errorMessage }}</div>
+          </div>
+
+          <div class="text-container">
+            <a routerLink='/forgot-password' class="blue-link ">Forgot your password?</a>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,83 @@
+<div fxLayout='row' fxLayoutAlign="end start">
+  <table>
+    <tr>
+      <td style="width:160px;">
+        <button pButton class="ui-button-primary" label=" "
+                (click)="displayNewSearch=true" [disabled]="!hasParams()">Save Current Search
+        </button>
+      </td>
+      <td style="width:160px; max-width: 160px;">
+        <p-dropdown [options]="searchesDd" [(ngModel)]="selectedSearch" [style]="{'width':'100%'}"
+                    [ngModelOptions]="{standalone: true}"
+                    (onChange)="loadSearch($event.value)"
+        ></p-dropdown>
+
+      </td>
+      <td>
+        <button type="button"
+                [disabled]="!searches || searches.length===0"
+                icon="ui-icon-edit" (click)="displayEditSearches=true" pButton></button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<p-dialog header="Save Search" [(visible)]="displayNewSearch" modal="modal" [responsive]="true">
+  <div class="card card-w-title">
+    <fb-search-filters></fb-search-filters>
+    <fb-nav-filters></fb-nav-filters>
+  </div>
+  <form #form1="ngForm" (ngSubmit)="displayNewSearch=false;saveSearch()">
+    <div class="ui-g form-group">
+      <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText name="searchName" [(ngModel)]="searchName">
+                        <label>Name</label>
+                    </span>
+      </div>
+    </div>
+
+    <!--<div class="form-group">-->
+    <!--<label>Name Your Search</label>-->
+    <!--<input type="text" maxlength="50" [(ngModel)]="searchName" name="searchName" class="form-control" required>-->
+    <!--</div>-->
+    <p-footer>
+      <button type="submit" [disabled]="!form1.form.valid || _restService.isLoading()" pButton class="ui-button-primary"
+              label="Save"></button>
+      <button (click)="displayNewSearch=false" type="submit" [disabled]="_restService.isLoading()" pButton
+              class="ui-button-info"
+              label="Cancel"></button>
+    </p-footer>
+  </form>
+</p-dialog>
+
+<p-dialog header="Manage Searches" [(visible)]="displayEditSearches" modal="modal" [responsive]="true">
+  <div *ngIf="!searches || (searches.length == 0)">You don't have any saved searches</div>
+  <table class="table-condensed table-bordered" style="width: 100%;" *ngIf="searches && (searches.length>0)">
+    <thead>
+    <tr>
+      <th>Search Name</th>
+      <th>Parameters</th>
+      <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let search of searches">
+      <td>
+        {{search.searchName}}
+      </td>
+      <td style="word-break: break-all;">
+        <fb-search-filters [searches]="search.params.searches"></fb-search-filters>
+        <fb-nav-filters [filters]="search.params"></fb-nav-filters>
+
+
+      </td>
+      <td style="width:30px;">
+        <button type="button" icon="ui-icon-close" pButton (click)="delete(search)"></button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</p-dialog>
+

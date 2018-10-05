@@ -1,0 +1,107 @@
+<div class="fb-container-centered card  account-border-element account-card-padding">
+  <div fxLayout.gt-sm="row"
+       fxLayout="column">
+    <div fxFlex="20%">
+      <div class="custom-title">Info</div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="space-between center"
+         fxFlex="80%"
+         *ngIf="!showChangeEmailForm">
+
+         <div *ngIf="_restService.isLoading()">
+             Loading...
+         </div>
+
+        <div *ngIf="!_restService.isLoading()">
+            <span [innerHtml]="_authService.getUser()?.email"></span>
+        </div>
+
+        <div>
+          <i class="fa ui-icon-chevron-right chevron" (click)="showChangeEmailForm=true;"></i>
+        </div>
+
+    </div>
+    <div fxLayout="column"
+         fxFlex="80"
+         *ngIf="showChangeEmailForm">
+      <div fxLayout="row"
+           fxLayoutAlign="space-between start">
+        <div fxLayout="column">
+          <div>
+            <span [innerHtml]="_authService.getUser()?.email"></span>
+          </div>
+
+          <form (ngSubmit)="getCode()"
+                #changeEmailForm="ngForm"
+                *ngIf="showChangeEmailForm">
+            <div class="md-inputfield space-on-top">
+              <input type="email"
+                     name="currentPassword"
+                     required
+                     pInputText
+                     [(ngModel)]="model.newEmail"
+                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,6})+$"
+                     (ngModelChange)="checkUserName($event)">
+              <label>New Email</label>
+
+              <div class="ui-message ui-messages-error ui-corner-all"
+                   *ngIf='!allowed && !_restService.isLoading()'>
+                This email is taken
+              </div>
+            </div>
+
+            <div class="space-on-top">
+              <button type="submit"
+                      pButton
+                      label="Get verification code"
+                      icon="ui-icon-email"
+                      class="space-on-right"
+                      [disabled]="!changeEmailForm.form.valid ||
+                               _restService.isLoading() ||
+                               !allowed">
+              </button>
+
+
+            </div>
+          </form>
+
+          <form (ngSubmit)="confirmCode()"
+                #enteCodeForm="ngForm"
+                class="space-on-top"
+                *ngIf="showEnterCodeForm">
+
+            <div class="md-inputfield space-on-top">
+              <input type="text"
+                     name="code"
+                     required
+                     pInputText
+                     [(ngModel)]="model.code">
+              <label>Enter Verification Code</label>
+              <div *ngIf='!allowed && !_restService.isLoading()'>This email is taken</div>
+            </div>
+
+
+            <div class="space-on-top">
+              <button type="submit"
+                      pButton
+                      class="buttons-container"
+                      label="Confirm email"
+                      icon="ui-icon-done"
+                      [disabled]="!enteCodeForm.form.valid|| _restService.isLoading()">
+              </button>
+            </div>
+
+          </form>
+        </div>
+        <button type="button"
+                (click)="showChangeEmailForm=false;showEnterCodeForm=false;"
+                pButton
+                label="Close"
+                icon="ui-icon-replay">
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
